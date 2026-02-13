@@ -22,12 +22,12 @@ def webServer(port=13331):
     connectionSocket, addr = serverSocket.accept()#Fill in start -are you accepting connections?     #Fill in end
     
     try:
-      message = connectionSocket.recv(1024).decode()#Fill in start -a client is sending you a message   #Fill in end 
+      message = connectionSocket.recv(1024)#Fill in start -a client is sending you a message   #Fill in end 
       filename = message.split()[1]
       
       #opens the client requested file. 
       #Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
-      f = open(filename[1:], "r")    #fill in start              #fill in end   )
+      f = open(filename[1:], "rb")    #fill in start              #fill in end   )
       
       
 
@@ -35,7 +35,7 @@ def webServer(port=13331):
       #Fill in start 
       header = b"HTTP/1.1 200 OK\r\n"        
       #Content-Type is an example on how to send a header as bytes. There are more!
-      outputdata = header + b"Content-Type: text/html; charset=UTF-8\r\n"
+      outputdata = header += b"\r\nContent-Type: text/html; charset=UTF-8\r\n"
 
 
       #Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n" Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
@@ -50,10 +50,10 @@ def webServer(port=13331):
 
       # Fill in start
 
-        connectionSocket.send(outputdata).encode()
+        connectionSocket.send(outputdata)
       # Fill in end
         
-      connectionSocket.close() #closing the connection socket
+        connectionSocket.close() #closing the connection socket
       
     except Exception as e:
       # Send response message for invalid request due to the file not being found (404)
@@ -75,6 +75,7 @@ def webServer(port=13331):
 
 if __name__ == "__main__":
   webServer(13331)
+
 
 
 
