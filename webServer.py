@@ -23,7 +23,7 @@ def webServer(port=13331):
     
     try:
       message = connectionSocket.recv(1024)#Fill in start -a client is sending you a message   #Fill in end 
-      filename = message.split()[1]
+      filename = message.split()[1].decode()
       
       #opens the client requested file. 
       #Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
@@ -35,6 +35,7 @@ def webServer(port=13331):
       #Fill in start 
       header = b"HTTP/1.1 200 OK\r\n"        
       #Content-Type is an example on how to send a header as bytes. There are more!
+      outputdata = header + b"Content-Type: text/html; charset=UTF-8\r\n"
       outputdata = header += b"\r\n"
 
 
@@ -59,11 +60,11 @@ def webServer(port=13331):
       # Send response message for invalid request due to the file not being found (404)
       # Remember the format you used in the try: block!
       #Fill in start
-      error_header = b"HTTP/1.1 404 Not Found\r\n"
-      error_header += b"Content-Type: text/html; charset=UTF-8\r\n"
-      error_header += b"\r\n"
-      error_body = b"<html><body><h1>404 Not Found</h1></body></html>"
-      connectionSocket.send(error_header + error_body)
+      errorheader = b"HTTP/1.1 404 Not Found\r\n"
+      errorheader += b"Content-Type: text/html; charset=UTF-8\r\n"
+      errorheader += b"\r\n"
+      errorbody = b"<html><body><h1>404 Not Found</h1></body></html>"
+      connectionSocket.send(errorheader + errorbody)
       #Fill in end
 
 
@@ -79,6 +80,7 @@ def webServer(port=13331):
 
 if __name__ == "__main__":
   webServer(13331)
+
 
 
 
